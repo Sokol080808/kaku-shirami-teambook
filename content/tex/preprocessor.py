@@ -150,6 +150,8 @@ def processwithcomments(caption, instream, outstream, listingslang):
         hash_script = 'hash'
         p = subprocess.Popen(['sh', 'content/contest/%s.sh' % hash_script], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         hsh, _ = p.communicate(nsource)
+        if p.returncode != 0 or not hsh.strip():
+            raise RuntimeError("Checksum generation failed for " + caption)
         hsh = hsh.split(None, 1)[0]
         hsh = hsh + ', '
     else:
